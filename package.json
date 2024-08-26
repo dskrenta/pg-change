@@ -1,7 +1,7 @@
 {
   "name": "pg-migrate",
   "version": "0.1.0",
-  "description": "Postgres migration tool for Node.js using Postgres.js",
+  "description": "Postgres migration tool built with Node.js using the Postgres.js driver",
   "bin": {
     "pgMigrate": "index.js"
   },
