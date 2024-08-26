@@ -1,0 +1,23 @@
+{
+  "name": "pg-migrate",
+  "version": "0.1.0",
+  "description": "Postgres migration tool for Node.js using Postgres.js",
+  "bin": {
+    "pgMigrate": "index.js"
+  },
+  "author": "David Skrenta <dskrenta@gmail.com> (https://davidskrenta.com)",
+  "homepage": "https://github.com/dskrenta/pg-migrate",
+  "repository": "github:dskrenta/pg-migrate",
+  "license": "MIT",
+  "scripts": {
+    "pg-create": "docker run --restart always --name postgres -e POSTGRES_PASSWORD=password -d -p 5432:5432 postgres",
+    "pg-start": "docker start postgres",
+    "pg-stop": "docker stop postgres",
+    "pg-delete": "docker rm postgres",
+    "pg-connect": "PGPASSWORD=password psql -h localhost postgres postgres",
+    "pg-logs": "docker logs postgres"
+  },
+  "devDependencies": {
+    "postgres": "^3.4.4"
+  }
+}
