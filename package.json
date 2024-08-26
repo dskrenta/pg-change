@@ -1,13 +1,13 @@
 {
-  "name": "pg-migrate",
+  "name": "pg-change",
   "version": "0.1.0",
   "description": "Postgres migration tool built with Node.js using the Postgres.js driver",
   "bin": {
-    "pgMigrate": "index.js"
+    "pgChange": "index.js"
   },
   "author": "David Skrenta <dskrenta@gmail.com> (https://davidskrenta.com)",
-  "homepage": "https://github.com/dskrenta/pg-migrate",
-  "repository": "github:dskrenta/pg-migrate",
+  "homepage": "https://github.com/dskrenta/pg-change",
+  "repository": "github:dskrenta/pg-change",
   "license": "MIT",
   "scripts": {
     "pg-create": "docker run --restart always --name postgres -e POSTGRES_PASSWORD=password -d -p 5432:5432 postgres",

@@ -151,7 +151,7 @@ async function runLatestMigrations () {
 async function main () {
   try {
     if (!sql) {
-      throw new Error('db.js not found, please create a postgres.js db connection file in order to use pgMigrate.')
+      throw new Error('db.js not found, please create a postgres.js db connection file in order to use pgChange.')
     }
 
     // Initialize the migrations table
@@ -185,7 +185,7 @@ async function main () {
 
       // Help
       case 'help':
-        console.log('Usage: pgMigrate <command> [name]')
+        console.log('Usage: pChange <command> [name]')
         console.log('Commands: create, run, run-latest')
 
         break
@@ -208,7 +208,7 @@ async function main () {
         process.exit(1)
     }
   } catch (err) {
-    console.error('pgMigrate error: ', err)
+    console.error('pgChange error: ', err)
     process.exit(1)
   }
 

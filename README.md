@@ -1,15 +1,15 @@
-# pg-migrate
+# pg-change
 
 Postgres migration tool built with Node.js using the [Postgres.js](https://github.com/porsager/postgres) driver
 
 ## Install
 
-`npx pgMigrate` or `npm i -g pgMigrate`
+`npx pgChange` or `npm i -g pgChange`
 
 ## Usage
 
 ### Create a postgres.js db connection file
-Put this `db.js` connection file in the directory you plan to run pgMigrate:
+Put this `db.js` connection file in the directory you plan to run pgChange:
 ```
 const postgres = require('postgres')
 
@@ -28,7 +28,7 @@ module.exports = sql
 
 ### Create a migration
 ```
-pgMigrate create users
+pgChange create users
 Created migration 1724709481967_users.js
 ```
 
@@ -50,13 +50,13 @@ module.exports = async function () {
 
 ### Run all the latest migrations that have not run
 ```
-pgMigrate run-latest
+pgChange run-latest
 Running migration 1724709481967_users.js
 ```
 
 ### Run a specific migration
 ```
-pgMigrate run 1724709481967_users.js
+pgChange run 1724709481967_users.js
 Running migration 1724709481967_users.js
 ```
 
