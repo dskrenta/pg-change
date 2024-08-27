@@ -1,6 +1,6 @@
 # pg-change
 
-Postgres migration tool built with Node.js using the [Postgres.js](https://github.com/porsager/postgres) driver
+Postgres migration tool built with Node.js using the [Postgres.js](https://github.com/porsager/postgres) client
 
 ## Install
 
