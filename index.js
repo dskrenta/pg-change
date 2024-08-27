@@ -3,10 +3,12 @@
 const path = require('path')
 const fs = require('fs').promises
 
-const sql = require('./db')
+const cwd = process.cwd()
+
+const sql = require(path.join(cwd, 'db'))
 
 // The directory where migrations are stored
-const MIGRATIONS_DIR = path.join(__dirname, './migrations')
+const MIGRATIONS_DIR = path.join(cwd, 'migrations')
 
 // The name of the migrations table
 const MIGRATIONS_TABLE = 'pg_migrations'
