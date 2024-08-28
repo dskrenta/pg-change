@@ -1,6 +1,6 @@
 {
   "name": "pg-change",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Postgres migration tool built with Node.js using the Postgres.js driver",
   "bin": {
     "pgChange": "index.js"
@@ -19,5 +19,19 @@
   },
   "devDependencies": {
     "postgres": "^3.4.4"
-  }
+  },
+  "keywords": [
+    "PostgreSQL",
+    "database",
+    "migration",
+    "postgres",
+    "postgres.js",
+    "pg-migrate", 
+    "pg-migrations",
+    "database-migration",
+    "db-migrate",
+    "schema-migration",
+    "database-tools",
+    "pg-change"
+  ]
 }
