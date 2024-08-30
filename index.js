@@ -187,7 +187,7 @@ async function main () {
 
       // Help
       case 'help':
-        console.log('Usage: pChange <command> [name]')
+        console.log('Usage: pgChange <command> [name]')
         console.log('Commands: create, run, run-latest')
 
         break
