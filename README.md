@@ -8,32 +8,34 @@ Postgres migration tool built with Node.js using the [Postgres.js](https://githu
 
 ## Usage
 
-### Create a postgres.js db connection file
-Put this `db.js` connection file in the directory you plan to run pgChange:
+### Create a pgChange.json configuration file
+
+Put this `pgChange.json` configuration file in the root directory of your project with your own values here:
+
 ```
-const postgres = require('postgres')
-
-const sql = postgres({
-  host: 'localhost',
-  port: 5432,
-  database: 'postgres',
-  username: 'postgres',
-  password: 'password',
-
-  onnotice: () => { } // Show no notices
-})
-
-module.exports = sql
+{
+  "migrationsPath": "migrations",
+  "postgresHost": "localhost",
+  "postgresPort": "5432",
+  "postgresUser": "postgres",
+  "postgresPassword": "password",
+  "postgresDb": "postgres"
+}
 ```
+
+Don't forget to add `pgChange.json` to your `.gitignore` file
 
 ### Create a migration
+
 ```
 pgChange create users
 Created migration 1724709481967_users.js
 ```
 
 ### Edit the created migration
+
 `migrations/1724709481967_users.js`:
+
 ```
 const sql = require('../db')
 
@@ -49,12 +51,14 @@ module.exports = async function () {
 ```
 
 ### Run all the latest migrations that have not run
+
 ```
 pgChange run-latest
 Running migration 1724709481967_users.js
 ```
 
 ### Run a specific migration
+
 ```
 pgChange run 1724709481967_users.js
 Running migration 1724709481967_users.js
