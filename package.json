@@ -1,6 +1,6 @@
 {
   "name": "pg-change",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Postgres migration tool built with Node.js using the Postgres.js driver",
   "type": "module",
   "bin": {
