@@ -37,9 +37,7 @@ Created migration 1724709481967_users.js
 `migrations/1724709481967_users.js`:
 
 ```
-const sql = require('../db')
-
-module.exports = async function () {
+export default async function (sql) {
   return sql`
     CREATE TABLE USERS (
       id SERIAL PRIMARY KEY,
