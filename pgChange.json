@@ -1,0 +1,8 @@
+{
+  "migrationsPath": "migrations",
+  "postgresHost": "localhost",
+  "postgresPort": "5432",
+  "postgresUser": "postgres",
+  "postgresPassword": "password",
+  "postgresDb": "postgres"
+}
