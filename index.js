@@ -7,7 +7,8 @@ import postgres from "postgres";
 
 const DEBUG = false;
 
-// The template for new migrations
+const MIGRATIONS_TABLE = "pg_migrations";
+
 const MIGRATION_TEMPLATE = `export default async function (sql) {
   return sql\`
     SELECT 1 + 1;
@@ -17,7 +18,6 @@ const MIGRATION_TEMPLATE = `export default async function (sql) {
 
 async function main() {
   try {
-    // Find the project root directory
     let rootDir = await findProjectRoot();
 
     const CONFIG_FILE = path.join(rootDir, "pgChange.json");
@@ -41,11 +41,7 @@ async function main() {
       onnotice: () => {}, // Show no notices
     });
 
-    // The directory where migrations are stored
     const MIGRATIONS_DIR = path.join(rootDir, migrationsPath);
-
-    // The name of the migrations table
-    const MIGRATIONS_TABLE = "pg_migrations";
 
     async function fileExists(path) {
       try {
@@ -71,17 +67,14 @@ async function main() {
     }
 
     async function init() {
-      // Create the migrations directory if it doesn't exist
       try {
         await fs.mkdir(MIGRATIONS_DIR);
       } catch (err) {
-        // Ignore the error if the directory already exists
         if (err.code !== "EEXIST") {
           throw err;
         }
       }
 
-      // Create the migrations table if it doesn't exist
       await sql`
         CREATE TABLE IF NOT EXISTS ${sql(MIGRATIONS_TABLE)} (
           name TEXT PRIMARY KEY,
@@ -91,7 +84,6 @@ async function main() {
     }
 
     function checkName(name) {
-      // Check if a name was provided
       if (!name) {
         console.error("Please provide a migration name.");
         process.exit(1);
@@ -99,50 +91,38 @@ async function main() {
     }
 
     async function createMigration(name) {
-      // Check if a name was provided
       checkName(name);
 
-      // Get the current timestamp
       const timestamp = new Date().getTime();
 
-      // Create the filename
       const filename = `${timestamp}_${name}.js`;
 
-      // Get the full path to the migration
       const filepath = path.join(MIGRATIONS_DIR, filename);
 
-      // Create the migration file
       await fs.writeFile(filepath, MIGRATION_TEMPLATE);
 
-      // Log that the migration was created
       console.log(`Created migration ${filename}`);
     }
 
     async function runMigration(name, skipCheck = false) {
-      // Check if a name was provided
       checkName(name);
 
-      // Check if the migration has already been run (unless skipCheck is true)
       if (!skipCheck) {
-        // Verify migration has not already been run
         const results = await sql`
           SELECT name FROM ${sql(MIGRATIONS_TABLE)}
           WHERE name = ${name};
         `;
 
-        // If the migration has already been run, exit
         if (results.length > 0) {
           console.error(`Migration ${name} has already been run.`);
           process.exit(1);
         }
       }
 
-      // Get the full path to the migration
       const filepath = path.join(MIGRATIONS_DIR, name);
 
       let migrationFunction = null;
 
-      // Import the migration function
       try {
         const { default: importedFunction } = await import(filepath);
         migrationFunction = importedFunction;
@@ -151,13 +131,10 @@ async function main() {
         process.exit(1);
       }
 
-      // Log that the migration is running
       console.log(`Running migration ${name}`);
 
-      // Run the migration
       await migrationFunction(sql);
 
-      // Add the migration to the migrations table
       await sql`
         INSERT INTO ${sql(MIGRATIONS_TABLE)} (name)
         VALUES (${name});
@@ -165,19 +142,15 @@ async function main() {
     }
 
     async function runLatestMigrations() {
-      // Get all migrations from migrations directory
       const filenames = await fs.readdir(MIGRATIONS_DIR);
 
-      // Get all migrations from database
       const results = await sql`
         SELECT name FROM ${sql(MIGRATIONS_TABLE)}
         ORDER BY name;
       `;
 
-      // Get the names of migrations that have already been run
       const executed = results.map((result) => result.name);
 
-      // Verify that all executed migrations exist in the migrations directory
       for (const name of executed) {
         if (!filenames.includes(name)) {
           console.error(
@@ -187,95 +160,74 @@ async function main() {
         }
       }
 
-      // Filter out migrations that have already been run
       const unrun = filenames.filter(
         (filename) => !executed.includes(filename)
       );
 
-      // Run all unrun migrations
       for (const name of unrun) {
-        // Skip the README
         if (name === "README.md") continue;
 
-        // Run the migration
         await runMigration(name, true);
       }
     }
 
     async function getConfig() {
-      // Check if the config file exists
       if (!(await fileExists(CONFIG_FILE))) {
         throw new Error(
           "No pgChange.json config file found. Please create one at the root of your project."
         );
       }
 
-      // Read the config file
       const configFile = await fs.readFile(CONFIG_FILE);
 
-      // Parse the config file
       return JSON.parse(configFile);
     }
 
     async function cli() {
-      // Initialize the migrations table
       await init();
 
-      // Get the command
       const command = process.argv[2];
 
-      // Get the name
       const name = process.argv[3];
 
-      // Run the command
       switch (command) {
-        // Create a new migration
         case "create":
           await createMigration(name);
 
           break;
 
-        // Run a specific migration
         case "run":
           await runMigration(name);
 
           break;
 
-        // Run all migrations that have not been run
         case "run-latest":
           await runLatestMigrations();
 
           break;
 
-        // Help
         case "help":
           console.log("Usage: pgChange <command> [name]");
           console.log("Commands: create, run, run-latest, help, config");
 
           break;
 
-        // Reset the migrations table
         case "reset":
-          // Drop the migrations table
           await sql`
             DROP TABLE ${sql(MIGRATIONS_TABLE)};
           `;
 
-          // Reinitialize the migrations table
           await init();
 
           break;
 
         case "config":
-          // Get the current config
           const config = await getConfig();
 
-          // Log the config
           console.log(JSON.stringify(config, null, 2));
 
           break;
 
-        // Catch all
         default:
           console.error(
             'Unknown command. Use "create", "run", "run-latest", "help", or "config".'
@@ -283,11 +235,9 @@ async function main() {
           process.exit(1);
       }
 
-      // Exit the script
       process.exit(0);
     }
 
-    // Run the cli
     await cli();
   } catch (err) {
     console.error("pgChange error: ", DEBUG ? err : err.message);
@@ -295,5 +245,4 @@ async function main() {
   }
 }
 
-// Run the script
 main();
