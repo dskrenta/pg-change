@@ -8,7 +8,10 @@
   },
   "author": "David Skrenta <dskrenta@gmail.com> (https://davidskrenta.com)",
   "homepage": "https://github.com/dskrenta/pg-change",
-  "repository": "github:dskrenta/pg-change",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dskrenta/pg-change.git"
+  },
   "license": "MIT",
   "scripts": {
     "pg-create": "docker run --restart always --name postgres -e POSTGRES_PASSWORD=password -d -p 5432:5432 postgres",
